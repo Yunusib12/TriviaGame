@@ -1,0 +1,70 @@
+/* Bootstrap
+============================================== */
+
+@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css");
+
+/* Google Fonts
+============================================== */
+
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower&display=swap');
+
+/* Global Configuration
+============================================== */
+
+body {
+    background-image: url('../images/background.svg');
+    /* background: #2638dd; */
+}
+
+header h1 {
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+    font-family: cursive;
+    font-size: 5.2em;
+}
+
+main h3 {
+    margin-top: 1%;
+    font-size: 3.2em;
+    text-align: center;
+    font-family: 'Indie Flower', cursive;
+}
+
+div.maxWidth {
+    display: inline-block;
+    padding: 1%;
+    margin: 1%;
+    width: 19rem;
+    max-width: 19rem;
+    height: 15rem;
+    overflow: hidden;
+}
+
+div.maxWidth:hover {
+    cursor: pointer;
+    -webkit-transform: scale(1.3);
+    -ms-transform: scale(1.3);
+    transform: scale(1.3);
+    background: #a09f9fb4;
+}
+
+div.genCat {
+    margin: 5% auto;
+    margin-top: 2%;
+    text-align: center;
+    width: 90%;
+}
+
+footer {
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    color: white;
+    text-align: center;
+    font-size: 14px;
+    height: 50px;
+    width: 100%;
+    background: rgba(52, 58, 64, 0.72);
+}
