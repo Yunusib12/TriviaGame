@@ -15,6 +15,7 @@ $(function() {
     let $displayCategory = $("#displayCategory");
     let $displayDifficulty = $("#displayDifficulty");
     let $displayType = $("#displayType");
+    let $answer = $("#answers");
     let seconds = 30;
     let game;
     let counter = 0;
@@ -144,11 +145,20 @@ $(function() {
         $displayDifficulty.text(`Difficulty: ${displayDiff}`);
         $displayType.text(`Type: ${displayType}`);
 
-        console.log(displayQ);
-        console.log(displayCat);
-        console.log(displayDiff);
-        console.log(displayType);
+        console.log(getCatQ.incorrect_answers);
+        getCatQ.incorrect_answers.forEach(function(incAnsw) {
 
+            console.log(incAnsw);
+            let incorectAnsw = $("<div>")
+                .addClass("answer")
+                .text(incAnsw)
+                .appendTo($answer);
+        });
+
+        let correctAnswer = $("<div>")
+            .addClass("answer")
+            .text(getCatQ.correct_answer)
+            .appendTo($answer);
     }
 
     //Function Count Down for the user to pick the right answer
