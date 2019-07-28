@@ -8,6 +8,17 @@
 
 @import url('https://fonts.googleapis.com/css?family=Indie+Flower&display=swap');
 
+/* Local Font
+============================================== */
+
+@font-face {
+    font-family: 'digital-7regular';
+    src: url('../fonts/digital-7-webfont.woff2') format('woff2'), url('../fonts/digital-7-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 /* Global Configuration
 ============================================== */
 
@@ -55,6 +66,30 @@ div.genCat {
     margin-top: 2%;
     text-align: center;
     width: 90%;
+}
+
+div p.return a {
+    font-size: 20px;
+    color: #ffffff;
+}
+
+div.jumbotron {
+    margin-top: 1%;
+    border-radius: 10px;
+}
+
+div.timer {
+    font-family: 'digital-7regular', 'Orbitron', sans-serif;
+    font-size: 5vw;
+    text-align: center;
+    line-height: 0.6;
+    padding-top: 5px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+h1.display-4 {
+    font-size: 2.5rem;
 }
 
 footer {
