@@ -6,10 +6,6 @@ $(function() {
     let receivedToken = [];
     let questionArray = [];
     let indexQuestionArray = [];
-    let tokenUrl = "https://opentdb.com/api_token.php?command=request";
-    let getQuestions = "https://opentdb.com/api.php?amount=5&token=";
-    let giphyUrl = "http://api.giphy.com/v1/gifs/search?q=";
-    let giphyApiKey = "LSCkVZDfb9GAYZwtXeOtw4jD8pzZ9GDM";
     let $pickCategory = $("#pickCategory");
     let $genCat = $("#genCat");
     let $main = $("#main");
@@ -19,22 +15,58 @@ $(function() {
     let $displayCategory = $("#displayCategory");
     let $displayDifficulty = $("#displayDifficulty");
     let $displayType = $("#displayType");
+    let $message = $("#message");
     let $answer = $("#answers");
+    let $imgLoading = $("#imgLoading");
+    let tokenUrl = "https://opentdb.com/api_token.php?command=request";
+    let getQuestions = "https://opentdb.com/api.php?amount=5&token=";
+    let giphyUrl = "http://api.giphy.com/v1/gifs/search?q=";
+    let giphyApiKey = "LSCkVZDfb9GAYZwtXeOtw4jD8pzZ9GDM";
     let seconds = 30;
-    let game;
-    let counter = 0;
-    let clock;
-    let correctAnswer = 0;
-    let incorrectAnswer = 0;
+    let correctCount = 0;
+    let incorrectCount = 0;
     let unansweredQuestion = 0;
     let indexQuestion = -1;
-
+    let isTheGameStarted = false;
+    let timerActive = false;
+    let timerId;
+    let messageText;
+    let correctA;
 
     /* FUNCTIONS
     ======================================================================= */
 
-    //Function get Question from OpendDB Trivia
+    // function determin which category to display (OPEN DB Trivia / Local Array)
+    let whichCategoryToDisplay = function() {
 
+        if (isTheGameStarted) {
+
+            let countQuestionLeft = questionArray.length;
+            console.log(countQuestionLeft);
+            if (countQuestionLeft === 0) {
+
+                console.log("game Over");
+
+            } else {
+
+                console.log(indexQuestion);
+                $pickCategory.show();
+                let newQuestionArray = questionArray.splice(indexQuestion, 1);
+                let imgUrl = "./assets/images/comets-loading.svg";
+                $imgLoading.attr("src", imgUrl);
+                setTimeout(createCategory(newQuestionArray), 1500);
+            }
+
+        } else {
+
+            searchTriviaQ();
+        }
+
+
+    };
+
+
+    //Function get Question from OpendDB Trivia
     let searchTriviaQ = function() {
 
         let querySession = $.get(tokenUrl);
@@ -50,10 +82,8 @@ $(function() {
         $.get(getQuestions + receivedToken)
             .then(function(response) {
 
-                createCategory(response); //create category from the response
-                // console.log(response);
                 questionArray.push(response.results); //Add the data to a question array
-                // console.log(questionArray);
+                createCategory(questionArray); //create category from the response
             });
     };
 
@@ -61,7 +91,9 @@ $(function() {
 
     let createCategory = function(dataCat) {
 
-        let categoryData = dataCat.results;
+        let categoryData = dataCat[0];
+
+        console.log(categoryData);
 
         categoryData.forEach(function(catData) {
 
@@ -96,19 +128,43 @@ $(function() {
 
     };
 
-    // Wait while loading data
+    // Function starts the timer
+    let startTimer = function(startValue) {
+        if (!timerActive) {
+            seconds = startValue;
+            timerId = setTimeout(timerCountdown, 1000)
+            timerActive = true;
+            $timeLeft.show();
+        }
+    };
 
-    let waitLoading = function() {
+    // stops the timer and resets it to 0
+    let stopTimer = function() {
+        clearTimeout(timerId);
+        timerActive = false;
+        seconds = 30;
+        $timeLeft.hide();
+    }
 
-        setTimeout(function() {
-            let imgUrl = "./assets/images/comets-loading.svg";
 
-            let loadimg = $("<img>")
-                .attr("src", imgUrl);
+    //Function Count Down for the user to pick the right answer
+    function timerCountdown() {
 
-            $main.append(loadimg);
+        seconds--;
 
-        }, 1000);
+        // console.log(seconds);
+
+        $timeLeft.text(seconds);
+
+        if (seconds === 0) {
+            clearTimeout(timerId)
+            timerActive = false;
+            showResult();
+            return false;
+        }
+
+        setTimeout(timerCountdown, 1000);
+
     }
 
     // Function display Question Category Selected 
@@ -118,8 +174,14 @@ $(function() {
         // displaying the question <div>
         $replyQuestion.show();
 
-        let qD = $(questionArray); // Category Array that contains one question and answers - transorming the array into an jQuery object
-        let qDCat = qD[0]; // accessing the array 0 that contains all the categories and answers
+        // change the game status to started
+        isTheGameStarted = true;
+
+        //Start the timer countdown
+        startTimer(seconds);
+
+        // let qD = $(questionArray); // Category Array that contains one question and answers - transorming the array into an jQuery object
+        let qDCat = questionArray[0]; // accessing the array 0 that contains all the categories and answers
 
         // find the question index 
         let filteredObj = qDCat.find(function(item, i) {
@@ -131,7 +193,6 @@ $(function() {
 
         // add the index question to the array
         indexQuestionArray.push(indexQuestion);
-        console.log(indexQuestionArray);
 
         // searching in the array the category that the user selected
         let getCatQ = qDCat.find(catCont => catCont.category === categorySelected);
@@ -142,6 +203,9 @@ $(function() {
         let displayDiff = getCatQ.difficulty;
         let displayType = getCatQ.type;
 
+        if (displayType === "boolean") {
+            displayType = "True / False";
+        }
 
         // displaying the question and other infos related
         $displayQuestion.html(displayQ);
@@ -157,7 +221,10 @@ $(function() {
             let incorectAnsw = $("<div>")
                 .addClass("answer")
                 .html(incAnsw)
-                .attr("data-answer", 0)
+                .attr({
+                    "data-answer": incAnsw,
+                    "data-value": 0
+                })
                 .appendTo($answer);
         });
 
@@ -166,27 +233,61 @@ $(function() {
         let divCorrectAnswer = $("<div>")
             .addClass("answer")
             .html(correctAnswer)
-            .attr("data-answer", 1)
+            .attr({
+                "data-answer": correctAnswer,
+                "data-value": 1
+            })
             .appendTo($answer);
+        correctA = correctAnswer;
     };
 
-    //Function Count Down for the user to pick the right answer
-    function countdown() {
+    // Function that process the user answer and display the result
+    let showResult = function(userAnswer, answerV) {
 
-        seconds--;
+        // active timer means an answer was clicked, so process answer
+        if (timerActive) {
+            // stop that timer
+            stopTimer();
 
-        // console.log(seconds);
+            // result for a correct answer
+            if (answerV === 1) {
+                messageText = "You got it! " + userAnswer + " is the correct answer!";
+                $message.text(messageText)
+                    .addClass("alert alert-success")
+                    .attr("role", "alert");;
+                correctCount++;
 
-        $timeLeft.text(seconds);
+                //result for an incorrect answer
+            } else {
 
-        if (seconds === 0) {
-            clearTimeout(timer)
-            return false;
+                switch (correctA) {
+                    case 0:
+                        correctA = "False";
+                        break;
+                    case 1:
+                        correctA = "True";
+                        break;
+                }
+                messageText = "Your Answer: " + userAnswer + "<br>" + "Correct Answer: " + correctA;
+                $message.html(messageText)
+                    .addClass("alert alert-danger")
+                    .attr("role", "alert");
+                incorrectCount++;
+            };
+
+            // function was called when timer hit 0
+        } else {
+            $timeLeft.hide();
+            $answer.hide();
+            messageText = "The Correct Answer was " + correctA;
+            $message.text("Time's Up! - " + messageText)
+                .addClass("alert alert-danger")
+                .attr("role", "alert");;
+            unansweredQuestion++;
         }
 
-        setTimeout(countdown, 1000);
-
     }
+
 
     /* EVENTS ON CLICK
       ======================================================================= */
@@ -212,25 +313,19 @@ $(function() {
     $answer.on("click", ".answer", function(event) {
 
         let _this = $(this);
+        let dataAnswer = _this.attr("data-answer"); //get the answer value 
+        let dataValue = parseInt(_this.attr("data-value")); //get the answer value 
 
-        let answerValue = parseInt(_this.attr("data-answer")); //get the answer value 
+        $answer.hide()
 
-        if (answerValue === 1) {
-
-            //when user get the right answer
-            console.log("Good Job");
-
-        } else {
-
-            console.log("wrong");
-        }
+        //Check the user answer 
+        showResult(dataAnswer, dataValue);
 
     });
 
 
-    searchTriviaQ();
+    whichCategoryToDisplay();
     $replyQuestion.hide();
-    const timer = setTimeout(countdown, 1000);
 
 
 });

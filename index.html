@@ -23,7 +23,9 @@
         <main id="main">
             <div id="pickCategory">
                 <h3 class="text-white">Select a Category to begin</h3>
-                <div id="genCat" class="genCat"></div>
+                <div id="genCat" class="genCat">
+                    <img id="imgLoading" src="//:0" style="display:none">
+                </div>
             </div>
             <div id="replyQuestion">
                 <div class="row">
@@ -33,9 +35,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        <p class="return">
-                            <a href="#"><img src="./assets/images/left-arrow.svg" alt="Return"> Return</a>
-                        </p>
+                        <p class="return"></p>
                     </div>
                     <div class="col-md-6">
                         <div id="quiz">
@@ -49,6 +49,7 @@
                                     <p id="displayType"></p>
                                 </div>
                             </div>
+                            <div id="message"></div>
                             <div id="answers" class="answerContainer"></div>
                         </div>
                     </div>

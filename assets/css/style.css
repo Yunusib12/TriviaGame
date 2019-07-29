@@ -115,6 +115,11 @@ div.answer:hover {
     background: #a09f9fb4;
 }
 
+div.alert {
+    font-weight: bold;
+    text-align: center;
+}
+
 footer {
     padding: 15px;
     position: fixed;
