@@ -20,7 +20,7 @@ $(function() {
     let $imgLoading = $("#imgLoading");
     let tokenUrl = "https://opentdb.com/api_token.php?command=request";
     let getQuestions = "https://opentdb.com/api.php?amount=5&token=";
-    let giphyUrl = "http://api.giphy.com/v1/gifs/search?q=";
+    let giphyUrl = "https://api.giphy.com/v1/gifs/search?q=";
     let giphyApiKey = "LSCkVZDfb9GAYZwtXeOtw4jD8pzZ9GDM";
     let seconds = 30;
     let correctCount = 0;

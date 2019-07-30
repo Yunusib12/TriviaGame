@@ -47,9 +47,9 @@ div.maxWidth {
     display: inline-block;
     padding: 1%;
     margin: 1%;
-    width: 19rem;
-    max-width: 19rem;
-    height: 15rem;
+    width: 17rem;
+    max-width: 17rem;
+    height: 12rem;
     overflow: hidden;
 }
 
