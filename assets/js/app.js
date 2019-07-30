@@ -18,6 +18,10 @@ $(function() {
     let $displayType = $("#displayType");
     let $message = $("#message");
     let $answer = $("#answers");
+    let $correctCountText = $("#correctAnswer");
+    let $incorrectCountText = $("#wrongAnswer");
+    let $notAnsweredText = $("#notAnswered");
+    let $quizInfo = $("#quizInfo");
     let $imgLoading = $("#imgLoading");
     let tokenUrl = "https://opentdb.com/api_token.php?command=request";
     let getQuestions = "https://opentdb.com/api.php?amount=5&token=";
@@ -290,6 +294,34 @@ $(function() {
 
     }
 
+    // Function reset 
+    let reset = function() {
+
+        receivedToken = [];
+        questionArray = [];
+        indexQuestionArray = [];
+        seconds = 30;
+        correctCount = 0;
+        incorrectCount = 0;
+        unansweredQuestion = 0;
+        isTheGameStarted = false;
+        timerActive = false;
+
+    };
+
+    // Function update
+    let updateInfo = function() {
+
+        $correctCountText.text(`Correct Answer : ${correctCount}`)
+            .appendTo($quizInfo);
+
+        $incorrectCountText.text(`Incorrect Answer : ${incorrectCount}`)
+            .appendTo($quizInfo);
+
+        $notAnsweredText.text(`Not Answered : ${unansweredQuestion}`)
+            .appendTo($quizInfo);
+
+    };
 
     /* EVENTS ON CLICK
       ======================================================================= */
@@ -326,7 +358,12 @@ $(function() {
     });
 
 
+    /* GAME START HERE
+      ======================================================================= */
+
+
     whichCategoryToDisplay();
+    updateInfo();
     $replyQuestion.hide();
 
 
