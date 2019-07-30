@@ -46,24 +46,23 @@ $(function() {
 
         if (isTheGameStarted) {
 
-            let countQuestionLeft = questionArray.length;
-            console.log(countQuestionLeft);
+            $replyQuestion.hide();
+            let countQuestionLeft = questionArray[0].length;
+            console.log("CountQuestionLeft", countQuestionLeft);
             if (countQuestionLeft === 0) {
 
                 console.log("game Over");
 
             } else {
-
-                console.log(indexQuestion);
+                console.log("indexQuestion", indexQuestionArray);
                 $pickCategory.show();
-                let newQuestionArray = questionArray.splice(indexQuestion, 1);
-                let imgUrl = "./assets/images/comets-loading.svg";
-                $imgLoading.attr("src", imgUrl);
-                setTimeout(createCategory(newQuestionArray), 1500);
+                questionArray[0].splice(parseInt(indexQuestionArray), 1);
+
+                setTimeout(createCategory(questionArray), 3000);
             }
 
         } else {
-
+            alert("Am here");
             searchTriviaQ();
         }
 
@@ -98,7 +97,7 @@ $(function() {
 
         let categoryData = dataCat[0];
 
-        console.log(categoryData);
+        console.log("CategoryData", categoryData);
 
         categoryData.forEach(function(catData) {
 
@@ -165,6 +164,7 @@ $(function() {
             clearTimeout(timerId)
             timerActive = false;
             showResult();
+            stopTimer();
             return false;
         }
 
@@ -262,6 +262,10 @@ $(function() {
                     .addClass("alert alert-success")
                     .attr("role", "alert");;
                 correctCount++;
+                stopTimer();
+                updateInfo();
+                whichCategoryToDisplay();
+
 
                 //result for an incorrect answer
             } else {
@@ -279,6 +283,9 @@ $(function() {
                     .addClass("alert alert-danger")
                     .attr("role", "alert");
                 incorrectCount++;
+                stopTimer();
+                updateInfo();
+                whichCategoryToDisplay();
             };
 
             // function was called when timer hit 0
@@ -290,6 +297,9 @@ $(function() {
                 .addClass("alert alert-danger")
                 .attr("role", "alert");;
             unansweredQuestion++;
+            stopTimer();
+            updateInfo();
+            whichCategoryToDisplay();
         }
 
     }
@@ -300,12 +310,6 @@ $(function() {
         receivedToken = [];
         questionArray = [];
         indexQuestionArray = [];
-        seconds = 30;
-        correctCount = 0;
-        incorrectCount = 0;
-        unansweredQuestion = 0;
-        isTheGameStarted = false;
-        timerActive = false;
 
     };
 
