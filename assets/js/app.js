@@ -10,6 +10,7 @@ $(function() {
     let $genCat = $("#genCat");
     let $main = $("#main");
     let $timeLeft = $("#timeLeft");
+    let $instructionCat = $(".instructionCat");
     let $replyQuestion = $("#replyQuestion");
     let $displayQuestion = $("#displayQuestion");
     let $displayCategory = $("#displayCategory");
@@ -171,8 +172,9 @@ $(function() {
 
     let displayQuestion = function(categorySelected) {
 
-        // displaying the question <div>
+        // displaying the question <div> / hide instruction from preview page
         $replyQuestion.show();
+        $instructionCat.hide();
 
         // change the game status to started
         isTheGameStarted = true;

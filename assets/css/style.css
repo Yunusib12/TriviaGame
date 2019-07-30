@@ -120,6 +120,30 @@ div.alert {
     text-align: center;
 }
 
+div.instruction {
+    margin: 10px;
+    color: #ffffff;
+    font-size: 19px;
+    border-radius: 14px;
+    background: #28a745de;
+}
+
+div.instructionCat {
+    margin: 0 auto;
+    color: #ffffff;
+    font-size: 19px;
+    border-radius: 14px;
+    background: #28a745de;
+}
+
+div.gameScore {
+    margin: 0 auto;
+    color: #ffffff;
+    font-size: 20px;
+    border-radius: 14px;
+    background: #28a745de;
+}
+
 footer {
     padding: 15px;
     position: fixed;
