@@ -45,7 +45,7 @@ $(function() {
     let whichCategoryToDisplay = function() {
 
         if (isTheGameStarted) {
-            alert("Am here too");
+            console.log("Am here too");
             $replyQuestion.hide();
             let countQuestionLeft = questionArray[0].length;
             console.log("CountQuestionLeft", countQuestionLeft);
@@ -62,7 +62,7 @@ $(function() {
             }
 
         } else {
-            alert("Am here");
+            console.log("Am here");
             searchTriviaQ();
         }
 
