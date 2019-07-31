@@ -45,7 +45,7 @@ $(function() {
     let whichCategoryToDisplay = function() {
 
         if (isTheGameStarted) {
-
+            alert("Am here too");
             $replyQuestion.hide();
             let countQuestionLeft = questionArray[0].length;
             console.log("CountQuestionLeft", countQuestionLeft);
@@ -262,9 +262,8 @@ $(function() {
                     .addClass("alert alert-success")
                     .attr("role", "alert");;
                 correctCount++;
-                stopTimer();
                 updateInfo();
-                whichCategoryToDisplay();
+                //setTimeout(whichCategoryToDisplay, 3000);
 
 
                 //result for an incorrect answer
@@ -283,9 +282,8 @@ $(function() {
                     .addClass("alert alert-danger")
                     .attr("role", "alert");
                 incorrectCount++;
-                stopTimer();
                 updateInfo();
-                whichCategoryToDisplay();
+                //whichCategoryToDisplay();
             };
 
             // function was called when timer hit 0
