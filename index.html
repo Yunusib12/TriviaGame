@@ -8,6 +8,9 @@
     <!-- Added link to the jQuery Library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+    <!-- Added link to FontAwesome Library -->
+    <script src="https://kit.fontawesome.com/99cd1dc6f4.js"></script>
+
     <!-- Loading my Css Style-->
     <link rel="stylesheet" href="./assets/css/style.css">
 
@@ -69,12 +72,28 @@
                     <div class="col-md-2 gameScore">
                         <div id="quizInfo">
                             <h2>Game Score</h2>
-                            <p id="correctAnswer"></p>
+                            <p id="correctAnswer">Correct Answer</p>
                             <p id="wrongAnswer">Wrong Answer</p>
                             <p id="notAnswered">Not Answered</p>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div id="gameOver">
+                <div id="row">
+                    <div class="col-md-12 centered">
+                        <img id="imgGameOver" src="//:0" style="display:none">
+                        <div id="finalScoreResult">
+                            <h1 class="text-light text-center">Game Over</h1>
+                            <h4 id="correctAnswerFR"></h4>
+                            <h4 id="wrongAnswerFR"></h4>
+                            <h4 id="notAnsweredFR"></h4>
+                            <br>
+                            <button id="restartGame" type="button" class="btn btn-secondary"><i class="fas fa-play fa-5x"></i></button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </main>
 

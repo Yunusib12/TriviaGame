@@ -24,6 +24,13 @@ $(function() {
     let $notAnsweredText = $("#notAnswered");
     let $quizInfo = $("#quizInfo");
     let $imgLoading = $("#imgLoading");
+    let $gameOver = $("#gameOver");
+    let $imgGameOver = $("#imgGameOver");
+    let $correctAnswerFR = $("#correctAnswerFR");
+    let $wrongAnswerFR = $("#wrongAnswerFR");
+    let $notAnsweredFR = $("#notAnsweredFR");
+    let $finalScoreResult = $("#finalScoreResult");
+    let $restartGame = $("#restartGame");
     let tokenUrl = "https://opentdb.com/api_token.php?command=request";
     let getQuestions = "https://opentdb.com/api.php?amount=5&token=";
     let giphyUrl = "https://api.giphy.com/v1/gifs/search?q=";
@@ -48,18 +55,32 @@ $(function() {
         if (isTheGameStarted) {
 
             $replyQuestion.hide();
+            $gameOver.hide();
             let countQuestionLeft = questionArray[0].length - 1;
             console.log("CountQuestionLeft", countQuestionLeft);
-
-            alert(countQuestionLeft);
 
             if (countQuestionLeft === 0) {
 
                 console.log("game Over");
+                $gameOver.show();
+                // get Game Over Image from Giphy 
+                let imgName = "Game Over";
+                let getGameOVerImg = $.get(giphyUrl + imgName + "&api_key=" + giphyApiKey + "&limit=1")
+                    .then(function(dataImgGO) {
 
+                        let imgGOSrc = dataImgGO.data[0].images.original.url;
+
+                        $imgGameOver.attr("src", imgGOSrc)
+                            .addClass("img-fluid img-thumbnail rounded")
+                            .show();
+
+                    });
+
+                // Display the final Score
+
+                finalResult();
 
             } else {
-                console.log("indexQuestion", indexQuestionArray);
                 $pickCategory.show();
                 questionArray[0].splice(parseInt(indexQuestionArray), 1);
 
@@ -68,7 +89,7 @@ $(function() {
             }
 
         } else {
-            console.log("Am here");
+            $gameOver.hide();
             searchTriviaQ();
         }
 
@@ -124,19 +145,18 @@ $(function() {
                 .text(categoryName);
             genDiv.append(insDiv);
 
-            let getImg = $.get(giphyUrl + categoryName + "&api_key=" + giphyApiKey + "&limit=1");
+            let getImg = $.get(giphyUrl + categoryName + "&api_key=" + giphyApiKey + "&limit=1")
+                .then(function(dataImg) {
 
-            getImg.then(function(dataImg) {
+                    let imgSrc = dataImg.data[0].images.original.url;
 
-                let imgSrc = dataImg.data[0].images.original.url;
+                    let img = $("<img>")
+                        .attr("src", imgSrc)
+                        .addClass("img-fluid img-thumbnail rounded");
 
-                let img = $("<img>")
-                    .attr("src", imgSrc)
-                    .addClass("img-fluid img-thumbnail rounded");
+                    insDiv.append(img);
 
-                insDiv.append(img);
-
-            });
+                });
 
         });
 
@@ -331,6 +351,7 @@ $(function() {
         receivedToken = [];
         questionArray = [];
         indexQuestionArray = [];
+        isTheGameStarted = false
 
     };
 
@@ -345,6 +366,22 @@ $(function() {
 
         $notAnsweredText.text(`Not Answered : ${unansweredQuestion}`)
             .appendTo($quizInfo);
+
+    };
+
+    // Function Display Final Result
+
+    let finalResult = function() {
+
+        $restartGame.show();
+        $correctAnswerFR.text(`Correct Answer : ${correctCount}`)
+            .appendTo($finalScoreResult);
+
+        $wrongAnswerFR.text(`Incorrect Answer : ${incorrectCount}`)
+            .appendTo($finalScoreResult);
+
+        $notAnsweredFR.text(`Not Answered : ${unansweredQuestion}`)
+            .appendTo($finalScoreResult);
 
     };
 
@@ -382,6 +419,18 @@ $(function() {
 
     });
 
+    // Restart The Game
+
+    $restartGame.on("click", function(event) {
+
+        reset();
+        $pickCategory.empty();
+        whichCategoryToDisplay();
+        updateInfo();
+        $replyQuestion.hide();
+        $pickCategory.show();
+
+    });
 
     /* GAME START HERE
       ======================================================================= */
@@ -390,6 +439,9 @@ $(function() {
     whichCategoryToDisplay();
     updateInfo();
     $replyQuestion.hide();
+    $restartGame.hide();
+
+
 
 
 });
