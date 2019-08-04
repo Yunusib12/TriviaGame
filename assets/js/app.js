@@ -22,6 +22,7 @@ $(function() {
     let $correctCountText = $("#correctAnswer");
     let $incorrectCountText = $("#wrongAnswer");
     let $notAnsweredText = $("#notAnswered");
+    let $quiz = $("#quiz");
     let $quizInfo = $("#quizInfo");
     let $imgLoading = $("#imgLoading");
     let $gameOver = $("#gameOver");
@@ -62,6 +63,7 @@ $(function() {
             if (countQuestionLeft === 0) {
 
                 console.log("game Over");
+                $imgLoading.hide();
                 $gameOver.show();
                 // get Game Over Image from Giphy 
                 let imgName = "Game Over";
@@ -81,6 +83,7 @@ $(function() {
                 finalResult();
 
             } else {
+                $imgLoading.hide();
                 $pickCategory.show();
                 questionArray[0].splice(parseInt(indexQuestionArray), 1);
 
@@ -299,7 +302,8 @@ $(function() {
                 correctCount++;
                 updateInfo();
                 stopTimer();
-                setTimeout(whichCategoryToDisplay, 5000);
+                setTimeout(nexQuestionDisplay, 3000);
+                //setTimeout(whichCategoryToDisplay, 5000);
                 //whichCategoryToDisplay();
 
                 //result for an incorrect answer
@@ -322,7 +326,8 @@ $(function() {
                 incorrectCount++;
                 updateInfo();
                 stopTimer();
-                setTimeout(whichCategoryToDisplay, 5000);
+                setTimeout(nexQuestionDisplay, 3000);
+                //setTimeout(whichCategoryToDisplay, 5000);
                 //whichCategoryToDisplay();
 
             };
@@ -339,7 +344,8 @@ $(function() {
             unansweredQuestion++;
             stopTimer();
             updateInfo();
-            setTimeout(whichCategoryToDisplay, 5000);
+            setTimeout(nexQuestionDisplay, 3000);
+            //setTimeout(whichCategoryToDisplay, 5000);
             //whichCategoryToDisplay();
         }
 
@@ -385,6 +391,23 @@ $(function() {
 
     };
 
+    // Function next Question
+
+    let nexQuestionDisplay = function() {
+
+        $pickCategory.hide();
+        $replyQuestion.hide();
+
+        let imgWaitToLoad = "./assets/images/comets-loading.svg";
+
+        $imgLoading.attr("src", imgWaitToLoad)
+            .show();
+
+        setTimeout(whichCategoryToDisplay, 3000);
+
+
+    };
+
     /* EVENTS ON CLICK
       ======================================================================= */
 
@@ -424,7 +447,9 @@ $(function() {
     $restartGame.on("click", function(event) {
 
         reset();
+        $imgLoading.hide();
         $pickCategory.empty();
+        $answer.empty();
         whichCategoryToDisplay();
         updateInfo();
         $replyQuestion.hide();
