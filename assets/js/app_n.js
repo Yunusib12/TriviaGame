@@ -1,7 +1,7 @@
 $(function() {
 
     /* GLOBAL VARIABLES 
-    ======================================================================= */
+     ======================================================================= */
 
     let receivedToken = [];
     let questionArray = [];
@@ -39,6 +39,7 @@ $(function() {
     let messageText;
     let correctA;
 
+
     /* FUNCTIONS
     ======================================================================= */
 
@@ -46,17 +47,14 @@ $(function() {
     let whichCategoryToDisplay = function() {
 
         if (isTheGameStarted) {
-
+            console.log("Am here too");
             $replyQuestion.hide();
-            let countQuestionLeft = questionArray[0].length - 1;
+            let countQuestionLeft = questionArray[0].length;
             console.log("CountQuestionLeft", countQuestionLeft);
-
-            alert(countQuestionLeft);
 
             if (countQuestionLeft === 0) {
 
                 console.log("game Over");
-
 
             } else {
                 console.log("indexQuestion", indexQuestionArray);
@@ -68,7 +66,7 @@ $(function() {
             }
 
         } else {
-            console.log("Am here");
+            console.log("Am here - Get question from OTDB");
             searchTriviaQ();
         }
 
@@ -142,23 +140,13 @@ $(function() {
 
     };
 
-    // // Function starts the timer
-    // let startTimer = function(startValue) {
-    //     if (!timerActive) {
-    //         seconds = startValue;
-    //         timerId = setTimeout(timerCountdown, 1000)
-    //         timerActive = true;
-    //         $timeLeft.show();
-    //     }
-    // };
-
     // stops the timer and resets it to 0
     let stopTimer = function() {
         clearTimeout(timerId);
         seconds = 30;
         timerActive = false;
         $timeLeft.hide();
-    }
+    };
 
 
     //Function Count Down for the user to pick the right answer
@@ -175,7 +163,7 @@ $(function() {
         if (seconds === 0) {
             clearTimeout(timerId)
             timerActive = false;
-            showResult("", 0);
+            showResult();
             return false;
         }
 
@@ -190,18 +178,18 @@ $(function() {
         // displaying the question <div> / hide instruction from preview page
         $replyQuestion.show();
         $instructionCat.hide();
-        $message.hide();
         $answer.empty();
         $answer.show();
+
 
         // change the game status to started
         isTheGameStarted = true;
 
-        stopTimer();
         //Start the timer countdown
-        timerCountdown();
+        stopTimer();
+        timerCountdown(seconds);
 
-        // let qD = $(questionArray); // Category Array that contains one question and answers - transorming the array into an jQuery object
+
         let qDCat = questionArray[0]; // accessing the array 0 that contains all the categories and answers
 
         // find the question index 
@@ -260,6 +248,7 @@ $(function() {
             })
             .appendTo($answer);
         correctA = correctAnswer;
+
     };
 
     // Function that process the user answer and display the result
@@ -271,16 +260,15 @@ $(function() {
             // result for a correct answer
             if (answerV === 1) {
                 messageText = "You got it! " + userAnswer + " is the correct answer!";
-                $message.show();
                 $message.text(messageText)
-                    .removeClass()
                     .addClass("alert alert-success")
                     .attr("role", "alert");;
                 correctCount++;
                 updateInfo();
                 stopTimer();
-                setTimeout(whichCategoryToDisplay, 5000);
-                //whichCategoryToDisplay();
+                setTimeout(whichCategoryToDisplay, 3000);
+                whichCategoryToDisplay();
+
 
                 //result for an incorrect answer
             } else {
@@ -294,16 +282,14 @@ $(function() {
                         break;
                 }
                 messageText = "Your Answer: " + userAnswer + "<br>" + "Correct Answer: " + correctA;
-                $message.show();
                 $message.html(messageText)
-                    .removeClass()
                     .addClass("alert alert-danger")
                     .attr("role", "alert");
                 incorrectCount++;
                 updateInfo();
                 stopTimer();
-                setTimeout(whichCategoryToDisplay, 5000);
-                //whichCategoryToDisplay();
+                setTimeout(whichCategoryToDisplay, 3000);
+                whichCategoryToDisplay();
 
             };
 
@@ -312,15 +298,14 @@ $(function() {
             $timeLeft.hide();
             $answer.hide();
             messageText = "The Correct Answer was " + correctA;
-            $message.show();
             $message.text("Time's Up! - " + messageText)
                 .addClass("alert alert-danger")
                 .attr("role", "alert");;
             unansweredQuestion++;
             stopTimer();
             updateInfo();
-            setTimeout(whichCategoryToDisplay, 5000);
-            //whichCategoryToDisplay();
+            setTimeout(whichCategoryToDisplay, 3000);
+            whichCategoryToDisplay();
         }
 
     }
@@ -333,6 +318,7 @@ $(function() {
         indexQuestionArray = [];
 
     };
+
 
     // Function update
     let updateInfo = function() {
@@ -348,6 +334,7 @@ $(function() {
 
     };
 
+
     /* EVENTS ON CLICK
       ======================================================================= */
 
@@ -360,12 +347,14 @@ $(function() {
         let categoryValue = _this.attr("data-category");
 
         $pickCategory.hide();
+        $instructionCat.hide();
+
+        console.log(categoryValue);
 
         displayQuestion(categoryValue); // Function that display question from the selected category
 
 
     });
-
 
     // Pick the right answer
 
@@ -388,8 +377,6 @@ $(function() {
 
 
     whichCategoryToDisplay();
-    updateInfo();
     $replyQuestion.hide();
-
 
 });
