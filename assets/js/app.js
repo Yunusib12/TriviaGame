@@ -58,11 +58,10 @@ $(function() {
             $replyQuestion.hide();
             $gameOver.hide();
             let countQuestionLeft = questionArray[0].length - 1;
-            console.log("CountQuestionLeft", countQuestionLeft);
+            //console.log("CountQuestionLeft", countQuestionLeft);
 
             if (countQuestionLeft === 0) {
 
-                console.log("game Over");
                 $imgLoading.hide();
                 $gameOver.show();
                 // get Game Over Image from Giphy 
@@ -86,19 +85,14 @@ $(function() {
                 $imgLoading.hide();
                 $pickCategory.show();
                 questionArray[0].splice(parseInt(indexQuestionArray), 1);
-
-                console.log("New array", questionArray);
-                setTimeout(createCategory(questionArray), 3000);
+                createCategory(questionArray);
             }
 
         } else {
             $gameOver.hide();
             searchTriviaQ();
         }
-
-
     };
-
 
     //Function get Question from OpendDB Trivia
     let searchTriviaQ = function() {
@@ -115,10 +109,9 @@ $(function() {
 
         $.get(getQuestions + receivedToken)
             .then(function(response) {
-                console.log(response);
 
                 questionArray.push(response.results); //Add the data to a question array
-                console.log(questionArray);
+                //console.log("Question Array ", questionArray);
                 createCategory(questionArray); //create category from the response
             });
     };
@@ -130,8 +123,6 @@ $(function() {
         $genCat.empty();
 
         let categoryData = dataCat[0];
-
-        console.log("CategoryData", categoryData);
 
         categoryData.forEach(function(catData) {
 
@@ -165,16 +156,6 @@ $(function() {
 
     };
 
-    // // Function starts the timer
-    // let startTimer = function(startValue) {
-    //     if (!timerActive) {
-    //         seconds = startValue;
-    //         timerId = setTimeout(timerCountdown, 1000)
-    //         timerActive = true;
-    //         $timeLeft.show();
-    //     }
-    // };
-
     // stops the timer and resets it to 0
     let stopTimer = function() {
         clearTimeout(timerId);
@@ -190,8 +171,6 @@ $(function() {
         $timeLeft.show();
         timerActive = true;
         seconds--;
-
-        // console.log(seconds);
 
         $timeLeft.text(seconds);
 
@@ -224,12 +203,13 @@ $(function() {
         //Start the timer countdown
         timerCountdown();
 
-        // let qD = $(questionArray); // Category Array that contains one question and answers - transorming the array into an jQuery object
         let qDCat = questionArray[0]; // accessing the array 0 that contains all the categories and answers
 
         // find the question index 
         let filteredObj = qDCat.find(function(item, i) {
             if (item.category === categorySelected) {
+                // console.log("Items ", item.category);
+                //console.log("Cat Select", categorySelected);
                 indexQuestion = i;
                 return i;
             }
@@ -237,7 +217,8 @@ $(function() {
 
         // add the index question to the array
         indexQuestionArray.push(indexQuestion);
-
+        //console.log("INdex", indexQuestion);
+        //console.log("FilteredObj", filteredObj);
         // searching in the array the category that the user selected
         let getCatQ = qDCat.find(catCont => catCont.category === categorySelected);
 
@@ -302,9 +283,7 @@ $(function() {
                 correctCount++;
                 updateInfo();
                 stopTimer();
-                setTimeout(nexQuestionDisplay, 3000);
-                //setTimeout(whichCategoryToDisplay, 5000);
-                //whichCategoryToDisplay();
+                setTimeout(nexQuestionDisplay, 2000);
 
                 //result for an incorrect answer
             } else {
@@ -326,10 +305,7 @@ $(function() {
                 incorrectCount++;
                 updateInfo();
                 stopTimer();
-                setTimeout(nexQuestionDisplay, 3000);
-                //setTimeout(whichCategoryToDisplay, 5000);
-                //whichCategoryToDisplay();
-
+                setTimeout(nexQuestionDisplay, 2000);
             };
 
             // function was called when timer hit 0
@@ -344,9 +320,7 @@ $(function() {
             unansweredQuestion++;
             stopTimer();
             updateInfo();
-            setTimeout(nexQuestionDisplay, 3000);
-            //setTimeout(whichCategoryToDisplay, 5000);
-            //whichCategoryToDisplay();
+            setTimeout(nexQuestionDisplay, 2000);
         }
 
     }
@@ -357,7 +331,10 @@ $(function() {
         receivedToken = [];
         questionArray = [];
         indexQuestionArray = [];
-        isTheGameStarted = false
+        isTheGameStarted = false;
+        correctCount = 0;
+        incorrectCount = 0;
+        unansweredQuestion = 0;
 
     };
 
@@ -403,7 +380,7 @@ $(function() {
         $imgLoading.attr("src", imgWaitToLoad)
             .show();
 
-        setTimeout(whichCategoryToDisplay, 3000);
+        setTimeout(whichCategoryToDisplay, 2000);
 
 
     };
@@ -448,19 +425,17 @@ $(function() {
 
         reset();
         $imgLoading.hide();
-        $pickCategory.empty();
-        $answer.empty();
+        $pickCategory.show();
         whichCategoryToDisplay();
         updateInfo();
         $replyQuestion.hide();
-        $pickCategory.show();
 
     });
 
     /* GAME START HERE
       ======================================================================= */
 
-
+    reset();
     whichCategoryToDisplay();
     updateInfo();
     $replyQuestion.hide();
