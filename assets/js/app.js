@@ -207,9 +207,11 @@ $(function() {
 
         // find the question index 
         let filteredObj = qDCat.find(function(item, i) {
-            if (item.category === categorySelected) {
-                // console.log("Items ", item.category);
-                //console.log("Cat Select", categorySelected);
+            let it = item.category;
+            let cat = categorySelected.trim();
+            if (it.trim() === cat) {
+                console.log("Items ", it);
+                console.log("Cat Select", cat);
                 indexQuestion = i;
                 return i;
             }
@@ -218,7 +220,7 @@ $(function() {
         // add the index question to the array
         indexQuestionArray.push(indexQuestion);
         //console.log("INdex", indexQuestion);
-        //console.log("FilteredObj", filteredObj);
+        console.log("FilteredObj", filteredObj);
         // searching in the array the category that the user selected
         let getCatQ = qDCat.find(catCont => catCont.category === categorySelected);
 
